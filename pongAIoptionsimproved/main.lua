@@ -331,6 +331,11 @@ function love.draw()
             0, 10, VIRTUAL_WIDTH, 'center')
         love.graphics.printf('Press Enter to serve!', 0, 20, VIRTUAL_WIDTH, 'center')
     elseif gameState == 'play' then
+        love.graphics.setFont(smallFont)
+        love.graphics.printf('v ' .. tostring(real_y) .. "   v!", 
+            0, 10, VIRTUAL_WIDTH, 'center')
+            love.graphics.printf('veces ' .. tostring(veces) .. "   v!", 
+            0, 20, VIRTUAL_WIDTH, 'center')
         -- no UI messages to display in play
     elseif gameState == 'done' then
         -- UI messages
@@ -378,25 +383,66 @@ end
 
 function aiMovesPaddle(player)
     real_y=0
-    if ball.dx>0 then 
-        if player.y>=VIRTUAL_HEIGHT/2-9 then
-            player.dy = -PADDLE_SPEED
-        elseif player.y<VIRTUAL_HEIGHT/2-11 then
-            player.dy = PADDLE_SPEED
-        else
-            player.dy = 0
-        end
-    else
+    if ball.dx<0 then 
         s_left=ball.x-15
+    else
+        s_left=(VIRTUAL_WIDTH -ball.x-15)*(-1)
+    end
+
+        --s_left=ball.x-15
         t_left=s_left/ball.dx*(-1)
         total_y_expected=t_left*ball.dy
-        if total_y_expected>0 then
+        if ball.dy>0 then
             if total_y_expected<VIRTUAL_HEIGHT-ball.y-4 then
                 real_y=ball.y+total_y_expected-2
+            
+            else
+                total_y_expected=total_y_expected+ball.y
+                resto=total_y_expected % VIRTUAL_HEIGHT
+                veces=math.floor(total_y_expected/VIRTUAL_HEIGHT)
+                if veces%2==1 then
+                    real_y=VIRTUAL_HEIGHT-resto-2
+                else
+                    real_y=resto-2
+                end
+            end
+
+
+
+
+
+
+
+        else
+
+            -- if (ball.y >= (player.y+8)) and (ball.y <= (player.y+12)) then
+            --     player.dy =0
+            -- elseif ball.y < (player.y+10) then
+            --     player.dy = -PADDLE_SPEED
+            -- elseif ball.y > (player.y+10) then
+            --     player.dy = PADDLE_SPEED
+            -- else
+            --     player.dy = 0
+            -- end
+            total_y_expected=total_y_expected*(-1)
+            if total_y_expected<ball.y then
+                real_y=ball.y-total_y_expected+2
+            
+            else
+                total_y_expected=total_y_expected-ball.y
+                resto=(total_y_expected) % VIRTUAL_HEIGHT
+                veces=math.floor(total_y_expected/VIRTUAL_HEIGHT)
+                if veces%2==0 then
+                    real_y=resto-2
+                else
+                    real_y=VIRTUAL_HEIGHT-resto-2
+                end
             end
         end
 
-        if (real_y >= (player.y+8)) and (real_y <= (player.y+12)) then
+        
+
+        if (real_y >= (player.y+9)) and (real_y <= (player.y+11)) then
             player.dy =0
         elseif real_y < (player.y+10) then
             player.dy = -PADDLE_SPEED
@@ -406,7 +452,11 @@ function aiMovesPaddle(player)
             player.dy = 0
         end
 
-    end
+            
+
+        
+
+    
 
    
 
