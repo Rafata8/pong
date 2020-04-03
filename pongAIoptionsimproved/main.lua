@@ -377,50 +377,42 @@ end
 
 
 function aiMovesPaddle(player)
-
-    if player==player1 then
-        if ball.dx>0 then 
-            if player.y>=VIRTUAL_HEIGHT/2-9 then
-                player.dy = -PADDLE_SPEED
-            elseif player.y<VIRTUAL_HEIGHT/2-11 then
-                player.dy = PADDLE_SPEED
-            else
-                player.dy = 0
-            end
+    real_y=0
+    if ball.dx>0 then 
+        if player.y>=VIRTUAL_HEIGHT/2-9 then
+            player.dy = -PADDLE_SPEED
+        elseif player.y<VIRTUAL_HEIGHT/2-11 then
+            player.dy = PADDLE_SPEED
         else
-            if (ball.y >= (player.y+8)) and (ball.y <= (player.y+12)) then
-                player.dy =0
-            elseif ball.y < (player.y+10) then
-                player.dy = -PADDLE_SPEED
-            elseif ball.y > (player1.y+10) then
-                player.dy = PADDLE_SPEED
-            else
-                player.dy = 0
-            end
+            player.dy = 0
         end
-
     else
-
-        if ball.dx<0 then 
-            if player.y>=VIRTUAL_HEIGHT/2-9 then
-                player.dy = -PADDLE_SPEED
-            elseif player.y<VIRTUAL_HEIGHT/2-11 then
-                player.dy = PADDLE_SPEED
-            else
-                player.dy = 0
-            end
-        else
-            if (ball.y >= (player.y+8)) and (ball.y <= (player.y+12)) then
-                player.dy =0
-            elseif ball.y < (player.y+10) then
-                player.dy = -PADDLE_SPEED
-            elseif ball.y > (player.y+10) then
-                player.dy = PADDLE_SPEED
-            else
-                player.dy = 0
+        s_left=ball.x-15
+        t_left=s_left/ball.dx*(-1)
+        total_y_expected=t_left*ball.dy
+        if total_y_expected>0 then
+            if total_y_expected<VIRTUAL_HEIGHT-ball.y-4 then
+                real_y=ball.y+total_y_expected-2
             end
         end
+
+        if (real_y >= (player.y+8)) and (real_y <= (player.y+12)) then
+            player.dy =0
+        elseif real_y < (player.y+10) then
+            player.dy = -PADDLE_SPEED
+        elseif real_y > (player.y+10) then
+            player.dy = PADDLE_SPEED
+        else
+            player.dy = 0
+        end
+
     end
+
+   
+
+
+
+
 end
 
 function playerMovesPaddle(player)
