@@ -206,13 +206,25 @@ function love.update(dt)
     end
 
     -- player 1 movement
-    if love.keyboard.isDown('w') then
+    if (ball.y >= (player1.y+8)) and (ball.y <= (player1.y+12)) then
+        player1.dy =0
+    elseif ball.y < (player1.y+10) then
         player1.dy = -PADDLE_SPEED
-    elseif love.keyboard.isDown('s') then
+    elseif ball.y > (player1.y+10) then
         player1.dy = PADDLE_SPEED
     else
         player1.dy = 0
     end
+
+        -- -- player 2 movement
+        -- if  ball.y < (player2.y+10) then
+        --     player2.dy = -PADDLE_SPEED
+        -- elseif ball.y > (player2.y+10) then
+        --     player2.dy = PADDLE_SPEED
+        -- else
+        --     player2.dy = 0
+        -- end
+    
 
     -- player 2 movement
     if love.keyboard.isDown('up') then
